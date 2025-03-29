@@ -52,7 +52,7 @@ joblib==1.4.2
 jupyter_client==8.6.0
 jupyter_core==5.5.1
 kiwisolver==1.4.7
-limits==4.4.1
+limits==4.2
 Markdown==3.5.1
 markdown-it-py==3.0.0
 MarkupSafe==3.0.2
