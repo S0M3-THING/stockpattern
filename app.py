@@ -7,9 +7,10 @@ import uuid
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
+app = Flask(__name__, static_folder="static", template_folder="templates")
+
 limiter = Limiter(get_remote_address, app=app, default_limits=["10 per minute"])
 
-app = Flask(__name__, static_folder="static", template_folder="templates")
 
 resnet_model = load_resnet()
 
