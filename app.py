@@ -3,18 +3,27 @@ import os
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from cheatsheet import load_resnet, extract_features_resnet, buy_sell_mapping
+import uuid
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
+limiter = Limiter(get_remote_address, app=app, default_limits=["10 per minute"])
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
-
 resnet_model = load_resnet()
-
 
 root_dir = "./cheatsheet"
 database_images = list(buy_sell_mapping.keys())
 database_paths = [os.path.join(root_dir, img) for img in database_images]
 
 database_features_resnet = np.array([extract_features_resnet(resnet_model, img) for img in database_paths])
+
+def delete_old_images():
+    for file in os.listdir("uploads"):
+        file_path = os.path.join("uploads", file)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
 
 @app.route("/")
 def index():
@@ -25,13 +34,16 @@ def serve_static(path):
     return send_from_directory("static", path)
 
 @app.route("/analyze", methods=["POST"])
+@limiter.limit("10 per minute") 
 def analyze():
     try:
+        delete_old_images()
+
         if "image" not in request.files:
             return jsonify({"error": "No image uploaded"}), 400
 
         image = request.files["image"]
-        image_path = "uploaded_image.jpg"
+        image_path = f"uploads/{uuid.uuid4().hex}.jpg"
         image.save(image_path)
 
 

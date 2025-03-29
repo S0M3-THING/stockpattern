@@ -44,15 +44,12 @@
                 `;
 
                 let finalText = "";
-                if (data.final_decision === "buy") {
+                if (data.resnet_decision === "buy") {
                     finalText = "Final Decision: BUY";
                     document.getElementById("finalDecision").className = "final-decision buy-text";
-                } else if (data.final_decision === "sell") {
+                } else if (data.resnet_decision === "sell") {
                     finalText = "Final Decision: SELL";
                     document.getElementById("finalDecision").className = "final-decision sell-text";
-                } else {
-                    finalText = "Final Decision: UNCERTAIN ⚠️";
-                    document.getElementById("finalDecision").className = "final-decision uncertain-text";
                 }
                 document.getElementById("finalDecision").innerText = finalText;
 
